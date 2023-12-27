@@ -23,7 +23,7 @@ class ImageListView(APIView):
             # Folosește __icontains pentru a căuta în întregul șir, nu doar la început
             queryset = queryset.filter(oras__icontains=oras_param)
         if tara_param:
-            queryset = queryset.filter(tara=tara_param)
+            queryset = queryset.filter(tara__icontains=tara_param)
         if transport_param:
             queryset = queryset.filter(transport=transport_param)
 
@@ -44,7 +44,7 @@ class ElementDetailView(APIView):
 class UniqueValuesView(APIView):
     def get(self, request):
         # Obține toate valorile unice pentru 'tara', 'oras' și 'transport'
-        unique_tari = sorted(Element.objects.values_list('tara', flat=True).distinct())
+        unique_tari = sorted(self.get_unique_tari())
         unique_orase = sorted(self.get_unique_orase())
         unique_transport = sorted(Element.objects.values_list('transport', flat=True).distinct())
 
@@ -55,6 +55,18 @@ class UniqueValuesView(APIView):
         }
 
         return Response(response_data)
+
+    def get_unique_tari(self):
+        # Obține toate valorile pentru 'tara'
+        all_tari = Element.objects.values_list('tara', flat=True)
+        
+        # Concatenează toate valorile și împarte-le după virgulă
+        all_tari = ','.join(all_tari).split(',')
+        
+        # Elimină spațiile albe și obține valorile unice, apoi sortează alfabetic
+        unique_tari = sorted(set(map(str.strip, all_tari)))
+
+        return unique_tari
 
     def get_unique_orase(self):
         # Obține toate valorile pentru 'oras'
