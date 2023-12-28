@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from .models import Element
 from .serializers import ElementSerializer
 from .serializers import ImageSerializer
+from urllib.parse import unquote
 
 class ElementListCreateView(generics.ListCreateAPIView):
     queryset = Element.objects.all()
@@ -35,6 +36,26 @@ class ElementDetailView(APIView):
     def get(self, request, element_id):
         try:
             element = Element.objects.get(id=element_id)
+        except Element.DoesNotExist:
+            return Response({"error": "Element not found"}, status=404)
+
+        serializer = ElementSerializer(element, context={'request': request})
+        return Response(serializer.data)
+        
+class ElementDetailViewByURL(APIView):
+    def get(self, request):
+        # Obține URL-ul din query string
+        url_param = request.query_params.get('url', None)
+
+        if not url_param:
+            return Response({"error": "URL parameter is required"}, status=400)
+
+        # Decodifică URL-ul și înlătură eventualele spații în plus
+        decoded_url = unquote(url_param).strip()
+
+        try:
+            # Înlătură query string-ul din URL pentru a găsi elementul
+            element = Element.objects.get(url__startswith=decoded_url.split('?')[0])
         except Element.DoesNotExist:
             return Response({"error": "Element not found"}, status=404)
 
