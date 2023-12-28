@@ -14,6 +14,6 @@ class Element(models.Model):
     program = models.TextField()
     include = models.TextField()
     nu_include = models.TextField()
-    acte = models.TextField()
+    acte = models.TextField(blank=True)
     important = models.TextField()
 
