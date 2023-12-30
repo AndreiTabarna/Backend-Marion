@@ -120,7 +120,13 @@ class SimilarElementsView(APIView):
 
     def extract_tarif(self, tarif_text):
         # Elimină textul și păstrează doar numerele
-        return int(''.join(filter(str.isdigit, tarif_text)))
+        tarif_number = int(''.join(filter(str.isdigit, tarif_text)))
+
+        # Verifică dacă "lei" apare în text și împarte numărul la 5 în acest caz
+        if "lei" in tarif_text:
+            tarif_number /= 5
+
+        return tarif_number
 
     def get_similar_elements(self, current_tarif, current_element):
         # Obține toate elementele și sortează-le după diferența de tarif față de elementul curent
@@ -131,3 +137,4 @@ class SimilarElementsView(APIView):
         similar_elements = sorted_elements[:3]
 
         return similar_elements
+
