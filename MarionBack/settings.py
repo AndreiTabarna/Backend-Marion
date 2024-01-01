@@ -84,16 +84,7 @@ WSGI_APPLICATION = 'MarionBack.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'railway'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'DDAb1cEbF1cgd5C51dFb1abCcbdG3f14'),
-        'HOST': os.getenv('RAILWAY_TCP_PROXY_DOMAIN', ''),
-        'PORT': os.getenv('RAILWAY_TCP_PROXY_PORT', ''),
-    }
-}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
