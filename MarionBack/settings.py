@@ -88,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '46962',
+        'PORT': '47535',
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'NAME': os.environ.get('POSTGRES_DB'),
