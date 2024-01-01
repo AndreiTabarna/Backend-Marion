@@ -85,10 +85,14 @@ WSGI_APPLICATION = 'MarionBack.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'postgres://marionturism:marionturism@localhost:5432/marionturism'),
-        conn_max_age=600,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'railway'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'DDAb1cEbF1cgd5C51dFb1abCcbdG3f14'),
+        'HOST': os.getenv('RAILWAY_TCP_PROXY_DOMAIN', ''),
+        'PORT': os.getenv('RAILWAY_TCP_PROXY_PORT', ''),
+    }
 }
 
 # Password validation
