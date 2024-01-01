@@ -84,7 +84,6 @@ WSGI_APPLICATION = 'MarionBack.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-DATABASE_URL = 'postgres://marionturism:marionturism@localhost:5432/marionturism'
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
