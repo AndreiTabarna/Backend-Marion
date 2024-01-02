@@ -59,7 +59,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://frontend-marion-production.up.railway.app/",
+    "https://frontend-marion-production.up.railway.app",
 ]
 
 ROOT_URLCONF = 'MarionBack.urls'
