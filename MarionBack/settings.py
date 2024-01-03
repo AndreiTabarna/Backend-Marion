@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'MarionBack.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'marionturism',
-        'USER': 'marionturism',
-        'PASSWORD': 'marionturism',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': 'monorail.proxy.rlwy.net',
+        'PORT': '47535',
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'NAME': os.environ.get('POSTGRES_DB'),
     }
 }
 
