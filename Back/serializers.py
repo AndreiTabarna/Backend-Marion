@@ -18,50 +18,35 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Element
         fields = ['image_url', 'element_id', 'element_url']
 
-    def get_image_url(self, obj):
-        # Check if the request is using HTTPS
-        is_https = self.context['request'].is_secure()
 
+    def get_image_url(self, obj):
         # Obține URL-ul de bază din contextul serializatorului
         base_url = self.context['request'].build_absolute_uri('/')[:-1]
 
-        # Concatenează URL-ul imaginii
+        # Construiește URL-ul imaginii și adaugă "s" la sfârșitul "http", dacă este cazul
         image_url = f"{base_url}{obj.imagine.url}" if obj.imagine else None
-
-        # If the request is using HTTPS, replace 'http://' with 'https://'
-        if is_https and image_url:
+        if image_url and image_url.startswith('http://'):
             image_url = image_url.replace('http://', 'https://')
 
         return image_url
 
 class ElementSerializer(serializers.ModelSerializer):
-    # Adaugă un câmp pentru URL-ul de bază
-    '''base_url = serializers.SerializerMethodField()'''
-
     class Meta:
         model = Element
         fields = '__all__'
 
-    def get_base_url(self, obj):
-        # Specifică URL-ul de bază
-        return "http://127.0.0.1:8000"
-
-    # Suprascrie metoda to_representation pentru a include URL-ul de bază în răspuns
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-
-        # Verifică dacă cererea utilizează HTTPS
-        is_https = self.context['request'].is_secure()
 
         # Obține URL-ul de bază din contextul serializatorului
         base_url = self.context['request'].build_absolute_uri('/')[:-1]
 
-        # Concatenează URL-ul imaginii
+        # Actualizează URL-ul imaginii, adăugând "s" la sfârșitul "http", dacă este cazul
         image_url = f"{base_url}{instance.imagine.url}" if instance.imagine else None
-
-        # Dacă cererea utilizează HTTPS, înlocuiește 'http://' cu 'https://'
-        if is_https and image_url:
+        if image_url and image_url.startswith('http://'):
             image_url = image_url.replace('http://', 'https://')
 
         representation['imagine'] = image_url
+
         return representation
+
