@@ -19,11 +19,20 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ['image_url', 'element_id', 'element_url']
 
     def get_image_url(self, obj):
+        # Check if the request is using HTTPS
+        is_https = self.context['request'].is_secure()
+
         # Obține URL-ul de bază din contextul serializatorului
         base_url = self.context['request'].build_absolute_uri('/')[:-1]
 
         # Concatenează URL-ul imaginii
-        return f"{base_url}{obj.imagine.url}" if obj.imagine else None
+        image_url = f"{base_url}{obj.imagine.url}" if obj.imagine else None
+
+        # If the request is using HTTPS, replace 'http://' with 'https://'
+        if is_https and image_url:
+            image_url = image_url.replace('http://', 'https://')
+
+        return image_url
 
 class ElementSerializer(serializers.ModelSerializer):
     # Adaugă un câmp pentru URL-ul de bază
@@ -41,8 +50,18 @@ class ElementSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
 
+        # Verifică dacă cererea utilizează HTTPS
+        is_https = self.context['request'].is_secure()
+
         # Obține URL-ul de bază din contextul serializatorului
         base_url = self.context['request'].build_absolute_uri('/')[:-1]
 
-        representation['imagine'] = f"{base_url}{instance.imagine.url}" if instance.imagine else None
+        # Concatenează URL-ul imaginii
+        image_url = f"{base_url}{instance.imagine.url}" if instance.imagine else None
+
+        # Dacă cererea utilizează HTTPS, înlocuiește 'http://' cu 'https://'
+        if is_https and image_url:
+            image_url = image_url.replace('http://', 'https://')
+
+        representation['imagine'] = image_url
         return representation
